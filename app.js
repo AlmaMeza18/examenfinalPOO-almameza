@@ -47,6 +47,7 @@ const detectarBotones = (data) => {
             carrito[producto.id] = { ...producto }
          
             pintarCarrito()
+            puntos()
         })
     })
 }
@@ -67,7 +68,8 @@ const pintarCarrito = () => {
        template.querySelectorAll('td')[0].textContent = producto.title
        template.querySelectorAll('td')[1].textContent = producto.cantidad
        template.querySelectorAll('td')[3].textContent = (producto.precio)
-       template.querySelector('span').textContent = (producto.precio * producto.cantidad)
+       const add = producto.precio * producto.cantidad;
+       template.querySelector("span").textContent = puntos(add);
   
         
         //botones
@@ -82,8 +84,24 @@ const pintarCarrito = () => {
 
     pintarFooter()
     accionBotones()
+    puntos()
 
 }
+
+function puntos(nStr) {
+    nStr += "";
+    x = nStr.split(".");
+    x1 = x[0];
+    x2 = x.length > 1 ? "." + x[1] : "";
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+      x1 = x1.replace(rgx, "$1" + "," + "$2");
+    }
+    return x1 + x2;
+  }
+
+
+
 
 const footer = document.querySelector('#footer-carrito')
 const pintarFooter = () => {
@@ -106,7 +124,7 @@ const pintarFooter = () => {
  
 
     template.querySelectorAll('td')[0].textContent = nCantidad
-    template.querySelector('span').textContent = nPrecio
+    template.querySelector('span').textContent = puntos(nPrecio)
 
     const clone = template.cloneNode(true)
     fragment.appendChild(clone)
@@ -118,6 +136,7 @@ const pintarFooter = () => {
     boton.addEventListener('click', () => {
         carrito = {}
         pintarCarrito()
+        puntos()
     })
 
    
@@ -136,6 +155,7 @@ const accionBotones = () => {
             producto.cantidad ++
             carrito[btn.dataset.id] = { ...producto }
             pintarCarrito()
+            puntos()
         })
     })
 
@@ -150,8 +170,12 @@ const accionBotones = () => {
                 carrito[btn.dataset.id] = { ...producto }
             }
             pintarCarrito()
+            puntos()
         })
     })
 }
 
-const usCurrencyFormat = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'PYG'})
+
+ 
+
+
